@@ -2,21 +2,15 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://www.cvs.com/'
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
-}
-
-r = requests.get('https://www.cvs.com/shop/diet-nutrition/protein?icid=shop-diet-cat-link3-protein%27')
-
 class ScrapeInfo:
     """scraper object """
-    def __init__(self, html):
-        self.name = scrapeName(html)
-        self.price = scrapePrice(html)
-        self.avgRating = scrapeAvgRating(html)
-        self.numReview = scrapeNumReview(html)
+    def __init__(self):
+        self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'}
+        self.url = 'https://www.cvs.com/'
+    def scraper():
+        r = requests.get('https://www.cvs.com/shop/diet-nutrition/protein?icid=shop-diet-cat-link3-protein%27')
+        bsoup = BeautifulSoup(r.content, 'lxml')
+        links = soup.find_all('div,' class_ = )
 
 def scrapeName(html):
     """scrapes product name"""

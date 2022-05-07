@@ -1,52 +1,66 @@
+"""Scrape CVS website for all protien supplement data"""
 from selenium import webdriver
 import chromedriver_autoinstaller
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+import time
 import pandas as pd
 
-#initializing Chrome webdrivers
-chromedriver_autoinstaller.install()
-driver = webdriver.Chrome(service=Service())
+#implementation of Scrape_Protein class - uses webscraping to obtain protein supplement information
+class scrape_proteins:
+    def __init__(self):
+        pass
 
-#opening the cvs website
-driver.get('https://www.cvs.com')
-driver.maximize_window()
+    #defining the webscrape function
+    """
+    uses the CVS website to scrape protein supplements
+        -obtains protein product links
+        -finds the product name, price, info, and review
+        -prints information into a dictionary
 
-#navigating to protein page
-shop = driver.find_element(By.XPATH, '//a[text() = "Shop"]')
-shop.click()
+    """
+    def webscrape(self):
+        links = []
+        #looping through the 8 pages to find product links and appending to link list
+        for x in range (1,8):
+            url = "https://www.cvs.com/shop/diet-nutrition/protein?page=" + str(x)
+            chromedriver_autoinstaller.install()
+            driver = webdriver.Chrome(service=Service())
+            time.sleep(5)
+            driver.get(url)
 
-diet = driver.find_element(By.XPATH, '//div[text() = "Diet & nutrition"]')
-diet.click()
+            products = driver.find_elements(By.XPATH, '//a[@class = "css-1dbjc4n r-1o9r03r r-1loqt21 r-qtbb1w r-u8s1d r-1wipuzn r-1sofzug r-1otgn73 r-1i6wzkk r-lrvibr"]')
 
-protein = driver.find_element(By.XPATH, '//ul[@style = "padding: 13.5px 0px 0px 12px; margin: 0px;"]/li[4]/a')
-protein.click()
+            for y in products:
+                hrefs = y.get_attribute("href")
+                links.append(url + hrefs)
 
-#scraping the product info
-name = driver.find_elements(By.XPATH, '//div[@class = "css-1dbjc4n r-eqz5dr r-156q2ks r-1udh08x"]/section/div')
+        #looping through link list to find and print product information (name, price, info, and average reviews)
+        product_list = []
+        for link in links:
+            driver.get(link)
+            name = driver.find_elements(By.XPATH, '//h1[@class = "css-4rbku5 css-901oao r-1jn44m2 r-1ui5ee8 r-vw2c0b r-16krg75"]')
+            price = driver.find_elements(By.XPATH, '//div[@class = "css-901oao r-1khnkhu r-1jn44m2 r-3i2nvb r-vw2c0b r-1b7u577"]')
+            reviews = driver.find_elements(By.XPATH, '//div[@class = "css-901oao r-1khnkhu r-ubezar"]')
+            average = driver.find_elements(By.XPATH, '//div[@class = "css-901oao r-suhe1l r-vw2c0b r-7o8qx1"]')
 
-for x in name:
-    print(x.text)
+            for n in name:
+                product_list.append(n.text)
+            
+            for p in price:
+                product_list.append(p.text)
 
-price = driver.find_elements(By.XPATH, '//div[@class = "css-901oao r-1jn44m2 r-evnaw r-b88u0q r-135wba7"]')
+            for r in reviews:
+                product_list.append(r.text)
 
-for x in price:
-    print(x.text)
+            for a in average:
+                product_list.append(a.text)
+            time.sleep(10)
 
-reviews = driver.find_elements(By.XPATH, '//div[@class = "css-1dbjc4n r-1kihuf0"]')
+        print(product_list)
 
-average = driver.find_elements(By.XPATH, '//div[@class = "css-1dbjc4n r-1awozwy r-18u37iz r-zl2h9q"]/section')
 
-"""
-#creating dataframe [DOESNT WORK :(]
-product_df = pd.DataFrame(columns = ['Product Name', 'Price', 'Reviews', 'Average Reviews'])
-
-for x in range(len(name)):
-    product_df = product_df.append({
-        'Product Name' : name[x].text,
-        'Price': price[x].text,
-        'Reviews': reviews[x].text,
-        'Average Revoews' : average[x].text})
-
-print(product_df)
-"""
+#defining the if__name__ == "__main__ function"
+if __name__ == "__main__":        
+    x = scrape_proteins()
+    x.webscrape()

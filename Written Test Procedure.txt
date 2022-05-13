@@ -1,0 +1,21 @@
+Instructions for testing input/output functions
+
+Program Option #1 - def sort()
+
+	1. Lowest to Highest Price
+		-Choice of this option will sort and print a data frame displaying products from lowest to highest price
+
+	2. Highest to Lowest Price
+		-Choice of this option will sort and print a data frame displaying products from highest to lowest price
+
+	3. Highest to Lowest Average Reviews
+		-Choice of this option will sort and print a data frame displaying products from highest to lowest average reviews
+
+Program Option #2 - def(price)
+	-User will input a low and high price point
+	-After input, the function will filter and print a data frame within the specified price point
+
+Program Option #3 - def(search)
+	-User will input a keyword to search in the product names of the data frame
+	-After input, the function will find and print the partial matches of the keyword
+	

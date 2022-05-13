@@ -5,12 +5,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import pandas as pd
 
-#implemention of AmazonTest class - finding the links to products from main protein page
+#implemention of AmazonTest class
 class AmazonTestCase(unittest.TestCase):
     main = 'https://www.amazon.com/s?bbn=3760901&rh=n%3A6973704011&fs=true&ref=lp_6973704011_sar'
     product = 'https://www.amazon.com/Dymatize-Hydrolyzed-Absorbing-Digesting-Servings/dp/B099HZG89P/ref=sr_1_12?qid=1652420758&rdc=1&s=hpc&sr=1-12'
     
-    #implementation of test_main_product_page function - 
+    #implementation of test_main_product_page function - scrapes for links in main product page
     def test_main_product_page(self):
 
         #initializing webdrivers
@@ -28,13 +28,15 @@ class AmazonTestCase(unittest.TestCase):
         for y in self.prodlink:
                 hrefs = y.get_attribute("href")
                 self.links.append(hrefs)
-
+    
+    #implementation of test_individual_protein_page function - scrapes information for one protein page
     def test_individual_protein_page(self):
 
         #initializing webdrivers
         chromedriver_autoinstaller.install()
         self.driver = webdriver.Chrome(service=Service())
-
+        
+        #opening product page
         self.driver.get(self.product)
 
         #searching for product name, price, ratings, and average ratings

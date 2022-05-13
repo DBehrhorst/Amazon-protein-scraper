@@ -15,8 +15,8 @@ To run the program from the command line, type: python AmazonProteinScrape.py
 INTERPRETATION OF PROGRAM
 
 -Program will open the Amazon 'Protein' page to find all of the links for each product
-	-For web scraping time constraints, the scraper has been set to the first product page
-	-To scrape for more pages, the for loop on line 28 can be adjusted for up to 191 pages
+	-To reduce scraping time, the scraper has been set to scrape only the first product page
+	-To scrape for more pages, the for loop on line 28 may be adjusted for up to 191 pages
 
 -Program will then loop through each link to scrape for product name, price, number of ratings, and average ratings
 

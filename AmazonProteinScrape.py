@@ -11,19 +11,23 @@ class scrape_proteins:
     
     #defining the __init__ class
     def __init__(self):
+        """
+        Class Object
+        attributes: dataframe - pandas dataframe (list)
+        """
         self.dataframe = ()
-        pass
 
     #defining the webscrape function
-    """
-    uses the Amazon website to scrape protein supplements
-        -obtains protein product links
-        -finds the product name, price, number of ratings, and average ratings
-        -appends information to a dataframe
-    """
     def webscrape(self):
+        """
+        Scrapes Amazon website for protien product data.
+             -obtains protein product links
+            -finds the product name, price, number of ratings, and average ratings
+            -appends information to a dataframe
+        parameters: none
+        returns: df - dataframe
+        """
         links = []
-
         #looping through the pages to find product links and appending to link list
         for x in range (0,1):
             url = (f"https://www.amazon.com/s?i=hpc&bbn=3760901&rh=n%3A6973704011&fs=true&page=2&qid=1651897576&ref=sr_pg_{x}")
@@ -43,7 +47,6 @@ class scrape_proteins:
 
         #looping through link list to find and print product information (name, price, info, and average reviews)
         data = []
-        
         for link in links:
             driver.get(link)
             #finding the product information using XPATH
@@ -52,7 +55,7 @@ class scrape_proteins:
             review = driver.find_elements(By.XPATH, '//div[@class = "centerColAlign centerColAlign-bbcxoverride"]/div/div/span[3]/a/span')
             average = driver.find_elements(By.XPATH, '//div[@class = "a-fixed-left-grid-col aok-align-center a-col-right"]/div/span/span')
             
-            
+            #collect string from list
             enter_name = name[0].text
             try:
                 enter_price = price[0].text
@@ -67,6 +70,7 @@ class scrape_proteins:
             #appending dictionary to data list
             data.append(dict(d))
             
+            #clear lists and dictionaries for next iteration
             name.clear()
             price.clear()
             review.clear()
@@ -93,14 +97,12 @@ class scrape_proteins:
         return df
 
 #defining the sorting function
-"""
-uses the dataframe to sort through various options based on the users request
-    -Lowest to Highest Price
-    -Highest to Lowest Price
-    -Highest to Lowest Average Reviews
-"""
 def sort(data):
-
+    """
+    sorts dataframe by specified sort:  (Lowest to Highest Price, Highest to Lowest Price, Highest to Lowest Average Reviews)
+    parameters: data - pandas dataframe
+    returns: none
+    """
     #obtaining the user input for specified sorting
     print("""
     Options to sort include:
@@ -122,29 +124,40 @@ def sort(data):
         print(data)
 
 #defining the price input function
-"""
-printing out specified price ranges based on user input
-"""
 def price(data):
-
+    """
+    trims dataframe to specified price ranges based on user input
+    parameters: data - pandas dataframe
+    returns: none
+    """
     #user input for their price range
     low = input('Specify your low price point (Input one numerical value): ')
     high = input('Specify your high price point (Input one numerical value: ')
 
     #outputting prices specified in their range
     trimmed = data.drop(data[data.Price < float(low)].index, inplace = False)
-    trimmed = data.drop(data[data.Price > float(high)].index, inplace = False)
-    print(trimmed)
+    trimmed.drop(trimmed[trimmed.Price > float(high)].index, inplace = True)
+    if trimmed.empty:
+        print('There are no results in your price range.')
+    else:
+        print(trimmed)
 
 #defining the search function
 def search(data):
-
+    """
+    searches dataframe for specified keyword based on user input
+    parameters: data - pandas dataframe
+    returns: none
+    """
     #user input for search keyword
     searching = input('Specify a keyword to search through product names: ')
 
     #finding and printing the partial match in product name
-    x = data[data['Product Name'].str.contains(searching)]
-    print(x)
+    x = data[data['Product Name'].str.contains(searching, case = False)]
+    if x.empty:
+        print('There are no matches.')
+    else:
+        print(x)
 
 #defining the if__name__ == "__main__ function"
 if __name__ == "__main__":

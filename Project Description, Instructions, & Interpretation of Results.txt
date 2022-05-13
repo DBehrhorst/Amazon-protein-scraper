@@ -1,6 +1,6 @@
 PROJECT DESCRIPTION
 
-The Amazon Protein Scraper aims to scrape the 'Protein' page under the categories 'Vitamin & Dietary Supplements' > 'Sports Nutrition'.
+The Amazon Protein Scraper aims to scrape the 'Protein' page under the categories 'Beauty & Health' > 'Vitamin & Dietary Supplements' > 'Sports Nutrition'.
 Information such as product name, price, number of ratings, and average ratings will be scraped from the Amazon website.
 The user of this program will be able to sort the scraped information by price/ratings, filter a specified price range, and search for a keyword.
 
